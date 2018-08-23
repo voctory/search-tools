@@ -26,15 +26,15 @@ class Genius:
         lyrics = api.search_song(" ".join(words[1:]))
         # print(lyrics.lyrics)
 
-        firstLyrics = lyrics.lyrics[:1020] + " ..."
+        firstLyrics = lyrics.lyrics[:1995] + " ..."
         embed = discord.Embed(title='Lyrics for "{}" by {}'.format(lyrics.title, lyrics.artist),
                 description=firstLyrics,
                 color=0x801ecc)
 
         await self.client.say("", embed = embed)
 
-        if len(lyrics.lyrics) > 1020:
-            secondLyrics = " ..." + lyrics.lyrics[1021:]
+        if len(lyrics.lyrics) > 1995:
+            secondLyrics = " ..." + lyrics.lyrics[1995:]
             embed = discord.Embed(title='Lyrics for "{}" by {}'.format(lyrics.title, lyrics.artist),
                     description=secondLyrics,
                     color=0x801ecc)
