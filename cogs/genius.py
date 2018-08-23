@@ -26,7 +26,7 @@ class Genius:
         lyrics = api.search_song(" ".join(words[1:]))
         # print(lyrics.lyrics)
 
-        embed = discord.Embed(title=f'Lyrics for "{lyrics.title}" by {lyrics.artist}',
+        embed = discord.Embed(title='Lyrics for "{}" by {}'.format(lyrics.title, lyrics.artist),
                 description=lyrics.lyrics,
                 color=0x801ecc)
 
