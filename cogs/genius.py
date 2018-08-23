@@ -33,7 +33,7 @@ class Genius:
 
         await self.client.say("", embed = embed)
 
-        if len(lyrics) > 1020:
+        if len(lyrics.lyrics) > 1020:
             secondLyrics = " ..." + lyrics.lyrics[1021:]
             embed = discord.Embed(title='Lyrics for "{}" by {}'.format(lyrics.title, lyrics.artist),
                     description=secondLyrics,
