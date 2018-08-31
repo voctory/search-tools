@@ -12,7 +12,8 @@ with open('config.json') as data_file:
 client = commands.Bot(command_prefix = data["prefix"])
 
 # load cogs
-extensions = ['cogs.genius']
+extensions = ['cogs.genius',
+            'cogs.google']
 
 # checks for owner perms
 def ownerPerms(ctx):
