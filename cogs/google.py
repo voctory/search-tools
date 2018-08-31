@@ -29,7 +29,7 @@ class Google:
         await self.client.say("", embed = embed)
 
 def find(msg, cmd):
-    raw = get(f'https://www.google.com/search?q={msg} {cmd}').text
+    raw = get('https://www.google.com/search?q={} {}'.format(msg, cmd)).text
     page = fromstring(raw)
 
     answer = page.cssselect("div .mrH1y")[0].text_content()
