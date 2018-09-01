@@ -44,12 +44,18 @@ class Google:
     @commands.command(pass_context=True, aliases=['google'])
     async def find(self, ctx):
         words = ctx.message.clean_content.split(" ")
+        start = datetime.now()
 
         res = find(ctx.message.content[ctx.message.content.index(words[1]):])
 
         embed = discord.Embed(title=res[1],
                 description=res[0],
                 color=0x801ecc)
+
+        end = datetime.now()
+        diff = end - start
+
+        embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
 
         await self.client.say("", embed = embed)
 
@@ -75,13 +81,17 @@ def age(msg):
 
 
 def find (msg):
+
     raw = get('https://www.google.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
+
+    if len(page.cssselect("div.FSP1Dd")) == 0:
+        return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
 
     name = page.cssselect("div.FSP1Dd")[0].text_content()
 
     information = ""
-    for i in range(0, len(page.cssselect(".cC4Myd")) - 1):
+    for i in range(0, len(page.cssselect(".cC4Myd"))):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
 
     return information, name
