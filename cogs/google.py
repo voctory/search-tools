@@ -122,7 +122,7 @@ def find_coordinates (msg):
     if len(page.cssselect(".longitude")) == 0:
         return "I couldn't find anything on that. Did you make a typo?", "Nothing."
 
-    name = page.cssselect(".fn .org")[0].text_content()
+    name = page.cssselect("span.fn.org")[0].text_content()
 
     information = ""
     information += page.cssselect(".latitude")[0].text_content()
