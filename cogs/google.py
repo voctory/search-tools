@@ -125,6 +125,8 @@ def find_coordinates (msg):
     name = ''
     if len(page.cssselect("span.fn.org")) != 0:
         name = page.cssselect("span.fn.org")[0].text_content()
+    elif len(page.cssselect("caption.fn.org")) != 0:
+        name = page.cssselect("caption.fn.org")[0].text_content()
     else:
         name = page.cssselect("th.fn.org")[0].text_content()
 
