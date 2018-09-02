@@ -123,7 +123,7 @@ def find_coordinates (msg):
         return "I couldn't find anything on that. Did you make a typo?", "Nothing."
 
     name = ''
-    if len(page.cssselect("span.fn.org")) !== 0:
+    if len(page.cssselect("span.fn.org")) != 0:
         name = page.cssselect("span.fn.org")[0].text_content()
     else:
         name = page.cssselect("th.fn.org")[0].text_content()
