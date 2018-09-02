@@ -41,12 +41,30 @@ class Google:
 
         await self.client.say("", embed = embed)
 
-    @commands.command(pass_context=True, aliases=['google'])
+    @commands.command(pass_context=True)
     async def find(self, ctx):
         words = ctx.message.clean_content.split(" ")
         start = datetime.now()
 
         res = find(ctx.message.content[ctx.message.content.index(words[1]):])
+
+        embed = discord.Embed(title=res[1],
+                description=res[0],
+                color=0x801ecc)
+
+        end = datetime.now()
+        diff = end - start
+
+        embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+
+        await self.client.say("", embed = embed)
+
+    @commands.command(pass_context=True, aliases=['coords'])
+    async def coordinates(self, ctx):
+        words = ctx.message.clean_content.split(" ")
+        start = datetime.now()
+
+        res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):])
 
         embed = discord.Embed(title=res[1],
                 description=res[0],
@@ -93,6 +111,22 @@ def find (msg):
     information = ""
     for i in range(0, len(page.cssselect(".cC4Myd"))):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
+
+    return information, name
+
+def find_coordinates (msg):
+
+    raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect(".longitude")) == 0:
+        return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+
+    name = page.cssselect(".fn .org")[0].text_content()
+
+    information = ""
+    information += page.cssselect(".latitude")[0].text_content()
+    information += "\n" + page.cssselect(".longitude")[0].text_content()
 
     return information, name
 
