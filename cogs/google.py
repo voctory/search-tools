@@ -187,7 +187,9 @@ def find_coordinates (msg):
     else:
         longitude = float(longitude.replace("W", "")) * -1
 
-    return {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
+    res = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
+    print(res)
+    return res
 
 def setup(client):
     client.add_cog(Google(client))
