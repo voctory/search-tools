@@ -87,6 +87,7 @@ class Google:
             for x in split_locations:
                 res = find_coordinates(x)
                 embed.add_field(name=res[1], value=res[0], inline=False)
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
 
