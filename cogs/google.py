@@ -63,6 +63,7 @@ class Google:
 
                 # convert date to datetime
                 date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", ""), '%B %d %Y').time()
+                print(date)
 
                 if comparison["youngest"]["name"] == False:
                     comparison["youngest"]["name"] = res["name"]
