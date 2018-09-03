@@ -235,6 +235,7 @@ def find_birthday (msg):
             information = page.cssselect("span.A1t5ne")[i].text_content()
 
     res = {'info': information, 'name': name}
+    print(res)
     return res
 
 def find_coordinates (msg):
