@@ -69,8 +69,8 @@ class Google:
 
             res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):])
 
-            embed = discord.Embed(title=res[1],
-                    description=res[0],
+            embed = discord.Embed(title=res["name"],
+                    description=res["info"],
                     color=0x801ecc)
 
             end = datetime.now()
@@ -81,15 +81,35 @@ class Google:
             await self.client.say("", embed = embed)
 
         else:
+            comparison = {'west': {'value': 0, 'location': False}, 'east': {'value': 0, 'location': False}, 'north': {'value': 0, 'location': False}, 'south': {'value': 0, 'location': False}}
+
             embed = discord.Embed(title="Comparing Coordinates:",
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
             for x in split_locations:
                 res = find_coordinates(x)
-                embed.add_field(name=res[1], value=res[0], inline=False)
-                
+                embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+                if res["latitude"] < comparison["west"]["value"]:
+                    comparison["west"]["value"] = res["latitude"]
+                    comparison["west"]["location"] = res["name"]
+
+                if res["latitude"] > comparison["east"]["value"]:
+                    comparison["east"]["value"] = res["latitude"]
+                    comparison["east"]["location"] = res["name"]
+
+                if res["longitude"] < comparison["south"]["value"]:
+                    comparison["south"]["value"] = res["longitude"]
+                    comparison["south"]["location"] = res["name"]
+
+                if res["longitude"] > comparison["north"]["value"]:
+                    comparison["north"]["value"] = res["longitude"]
+                    comparison["north"]["location"] = res["name"]
+
+
             end = datetime.now()
             diff = end - start
+            embed.description = 'Furthest **NORTH** is `{}`.\nFurthest **SOUTH** is `{}`.\nFurthest **EAST** is `{}`.\nFurthest **WEST** is `{}`.\n'.format(comparison["north"]["location"], comparison["south"]["location"], comparison["east"]["location"], comparison["west"]["location"])
             embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
@@ -149,10 +169,25 @@ def find_coordinates (msg):
 
 
     information = ""
-    information += page.cssselect(".latitude")[0].text_content()
-    information += "\n" + page.cssselect(".longitude")[0].text_content()
+    latitude = page.cssselect(".latitude")[0].text_content()
+    information += latitude
+    longitude = page.cssselect(".longitude")[0].text_content()
+    information += "\n" + longitude
 
-    return information, name
+    latitude.replace("°", ".").replace("′", "").replace("″", "")
+    longitude.replace("°", ".").replace("′", "").replace("″", "")
+
+    if "N" in latitude:
+        latitude = float(latitude.replace("N", ""))
+    else:
+        latitude = float(latitude.replace("S", "")) * -1
+
+    if "E" in longitude:
+        longitude = float(longitude.replace("E", ""))
+    else:
+        longitude = float(longitude.replace("W", "")) * -1
+
+    return {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
 
 def setup(client):
     client.add_cog(Google(client))
