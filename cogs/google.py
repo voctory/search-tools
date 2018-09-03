@@ -81,7 +81,7 @@ class Google:
 
             end = datetime.now()
             diff = end - start
-            embed.description = '**YOUNGEST** is `{}`.\n**OLDEST** is `{}`.'.format(comparison["youngest"]["location"], comparison["oldest"]["location"])
+            embed.description = '**YOUNGEST** is `{}`.\n**OLDEST** is `{}`.'.format(comparison["youngest"]["name"], comparison["oldest"]["name"])
             embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
