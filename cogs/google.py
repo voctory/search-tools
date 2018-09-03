@@ -52,7 +52,7 @@ class Google:
             await self.client.say("", embed = embed)
 
         else:
-            comparison = {'west': {'value': 0, 'location': False}, 'east': {'value': 0, 'location': False}, 'north': {'value': 0, 'location': False}, 'south': {'value': 0, 'location': False}}
+            comparison = {'youngest': {'value': 0, 'name': False}, 'oldest': {'value': 0, 'name': False}}
 
             embed = discord.Embed(title="Comparing Birthdates:",
                     description="remind voc to add useful stuff here later",
@@ -62,40 +62,26 @@ class Google:
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 # convert date to datetime
-                date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", ""), '%B %d %Y')
-                print(date)
-                return
+                date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", ""), '%B %d %Y').total_seconds()
 
-                if comparison["south"]["location"] == False:
-                    comparison["south"]["value"] = res["latitude"]
-                    comparison["south"]["location"] = res["name"]
-                    comparison["north"]["value"] = res["latitude"]
-                    comparison["north"]["location"] = res["name"]
-                    comparison["west"]["value"] = res["longitude"]
-                    comparison["west"]["location"] = res["name"]
-                    comparison["east"]["value"] = res["longitude"]
-                    comparison["east"]["location"] = res["name"]
+                if comparison["youngest"]["name"] == False:
+                    comparison["youngest"]["name"] = res["name"]
+                    comparison["youngest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
+                    comparison["oldest"]["value"] = date
 
-                if res["latitude"] < comparison["south"]["value"]:
-                    comparison["south"]["value"] = res["latitude"]
-                    comparison["south"]["location"] = res["name"]
+                if date < comparison["youngest"]["value"]:
+                    comparison["youngest"]["value"] = date
+                    comparison["youngest"]["name"] = res["name"]
 
-                if res["latitude"] > comparison["north"]["value"]:
-                    comparison["north"]["value"] = res["latitude"]
-                    comparison["north"]["location"] = res["name"]
-
-                if res["longitude"] < comparison["west"]["value"]:
-                    comparison["west"]["value"] = res["longitude"]
-                    comparison["west"]["location"] = res["name"]
-
-                if res["longitude"] > comparison["east"]["value"]:
-                    comparison["east"]["value"] = res["longitude"]
-                    comparison["east"]["location"] = res["name"]
+                if date > comparison["oldest"]["value"]:
+                    comparison["oldest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
 
 
             end = datetime.now()
             diff = end - start
-            embed.description = 'Furthest **NORTH** is `{}`.\nFurthest **SOUTH** is `{}`.\nFurthest **EAST** is `{}`.\nFurthest **WEST** is `{}`.\n'.format(comparison["north"]["location"], comparison["south"]["location"], comparison["east"]["location"], comparison["west"]["location"])
+            embed.description = '**YOUNGEST** is `{}`.\n**OLDEST** is `{}`.'.format(comparison["youngest"]["location"], comparison["oldest"]["location"])
             embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
