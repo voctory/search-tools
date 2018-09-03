@@ -62,7 +62,7 @@ class Google:
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 # convert date to datetime
-                date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", ""), '%B %d %Y').date()
+                date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0], '%B %d %Y').date()
                 print(date)
 
                 if comparison["youngest"]["name"] == False:
