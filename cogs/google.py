@@ -70,11 +70,11 @@ class Google:
                     comparison["oldest"]["name"] = res["name"]
                     comparison["oldest"]["value"] = date
 
-                if date < comparison["youngest"]["value"]:
+                if date > comparison["youngest"]["value"]:
                     comparison["youngest"]["value"] = date
                     comparison["youngest"]["name"] = res["name"]
 
-                if date > comparison["oldest"]["value"]:
+                if date < comparison["oldest"]["value"]:
                     comparison["oldest"]["value"] = date
                     comparison["oldest"]["name"] = res["name"]
 
