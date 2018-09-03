@@ -82,7 +82,7 @@ class Google:
 
         else:
             embed = discord.Embed(title="Comparing Coordinates:",
-                    description="remind voc to add useful stuff here later"],
+                    description="remind voc to add useful stuff here later",
                     color=0x801ecc)
             for x in split_locations:
                 res = find_coordinates(split_locations[x])
