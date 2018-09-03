@@ -184,8 +184,8 @@ def find_coordinates (msg):
     longitude = page.cssselect(".longitude")[0].text_content()
     information += "\n" + longitude
 
-    latitude = latitude.replace("°", ".").replace("′", "").replace("″", "")
-    longitude = longitude.replace("°", ".").replace("′", "").replace("″", "")
+    latitude = latitude.replace(".", "").replace("°", ".").replace("′", "").replace("″", "")
+    longitude = longitude.replace(".", "").replace("°", ".").replace("′", "").replace("″", "")
 
     if "N" in latitude:
         latitude = float(latitude.replace("N", ""))
