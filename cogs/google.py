@@ -91,20 +91,20 @@ class Google:
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 if res["latitude"] < comparison["south"]["value"]:
-                    comparison["west"]["value"] = res["latitude"]
-                    comparison["west"]["location"] = res["name"]
-
-                if res["latitude"] > comparison["north"]["value"]:
-                    comparison["east"]["value"] = res["latitude"]
-                    comparison["east"]["location"] = res["name"]
-
-                if res["longitude"] < comparison["west"]["value"]:
-                    comparison["south"]["value"] = res["longitude"]
+                    comparison["south"]["value"] = res["latitude"]
                     comparison["south"]["location"] = res["name"]
 
-                if res["longitude"] > comparison["east"]["value"]:
-                    comparison["north"]["value"] = res["longitude"]
+                if res["latitude"] > comparison["north"]["value"]:
+                    comparison["north"]["value"] = res["latitude"]
                     comparison["north"]["location"] = res["name"]
+
+                if res["longitude"] < comparison["west"]["value"]:
+                    comparison["west"]["value"] = res["longitude"]
+                    comparison["west"]["location"] = res["name"]
+
+                if res["longitude"] > comparison["east"]["value"]:
+                    comparison["east"]["value"] = res["longitude"]
+                    comparison["east"]["location"] = res["name"]
 
 
             end = datetime.now()
