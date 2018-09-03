@@ -32,14 +32,71 @@ class Google:
     @commands.command(pass_context=True, aliases=['birthday', 'born', 'age'])
     async def birth(self, ctx):
         words = ctx.message.clean_content.split(" ")
+        start = datetime.now()
 
-        res = age(ctx.message.content[ctx.message.content.index(words[1]):])
+        split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
+        if len(split_names) == 1:
 
-        embed = discord.Embed(title="something",
-                description=res,
-                color=0x801ecc)
+            res = find_birthday(ctx.message.content[ctx.message.content.index(words[1]):])
 
-        await self.client.say("", embed = embed)
+            embed = discord.Embed(title=res["name"],
+                    description=res["info"],
+                    color=0x801ecc)
+
+            end = datetime.now()
+            diff = end - start
+
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+
+            await self.client.say("", embed = embed)
+
+        else:
+            comparison = {'west': {'value': 0, 'location': False}, 'east': {'value': 0, 'location': False}, 'north': {'value': 0, 'location': False}, 'south': {'value': 0, 'location': False}}
+
+            embed = discord.Embed(title="Comparing Birthdates:",
+                    description="remind voc to add useful stuff here later",
+                    color=0x801ecc)
+            for x in split_names:
+                res = find_birthday(x)
+                embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+                # convert date to datetime
+                date = datetime.strptime(res["info"].split("(")[0].strip(), '%b %d, %Y')
+                print(date)
+                return
+
+                if comparison["south"]["location"] == False:
+                    comparison["south"]["value"] = res["latitude"]
+                    comparison["south"]["location"] = res["name"]
+                    comparison["north"]["value"] = res["latitude"]
+                    comparison["north"]["location"] = res["name"]
+                    comparison["west"]["value"] = res["longitude"]
+                    comparison["west"]["location"] = res["name"]
+                    comparison["east"]["value"] = res["longitude"]
+                    comparison["east"]["location"] = res["name"]
+
+                if res["latitude"] < comparison["south"]["value"]:
+                    comparison["south"]["value"] = res["latitude"]
+                    comparison["south"]["location"] = res["name"]
+
+                if res["latitude"] > comparison["north"]["value"]:
+                    comparison["north"]["value"] = res["latitude"]
+                    comparison["north"]["location"] = res["name"]
+
+                if res["longitude"] < comparison["west"]["value"]:
+                    comparison["west"]["value"] = res["longitude"]
+                    comparison["west"]["location"] = res["name"]
+
+                if res["longitude"] > comparison["east"]["value"]:
+                    comparison["east"]["value"] = res["longitude"]
+                    comparison["east"]["location"] = res["name"]
+
+
+            end = datetime.now()
+            diff = end - start
+            embed.description = 'Furthest **NORTH** is `{}`.\nFurthest **SOUTH** is `{}`.\nFurthest **EAST** is `{}`.\nFurthest **WEST** is `{}`.\n'.format(comparison["north"]["location"], comparison["south"]["location"], comparison["east"]["location"], comparison["west"]["location"])
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+            await self.client.say("", embed = embed)
 
     @commands.command(pass_context=True)
     async def find(self, ctx):
@@ -160,6 +217,25 @@ def find (msg):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
 
     return information, name
+
+def find_birthday (msg):
+
+    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect("div.cC4Myd")) == 0:
+        return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
+
+    name = page.cssselect("div.FSP1Dd")[0].text_content()
+
+    information = ""
+    for i in range(0, len(page.cssselect(".cC4Myd"))):
+        # identify the birthdate
+        if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Born:":
+            information = page.cssselect("span.A1t5ne")[i].text_content()
+
+    res = {'info': information, 'name': name}
+    return res
 
 def find_coordinates (msg):
 
