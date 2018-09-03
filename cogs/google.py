@@ -90,6 +90,16 @@ class Google:
                 res = find_coordinates(x)
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
+                if comparison["south"]["location"] == False:
+                    comparison["south"]["value"] = res["latitude"]
+                    comparison["south"]["location"] = res["name"]
+                    comparison["north"]["value"] = res["latitude"]
+                    comparison["north"]["location"] = res["name"]
+                    comparison["west"]["value"] = res["longitude"]
+                    comparison["west"]["location"] = res["name"]
+                    comparison["east"]["value"] = res["longitude"]
+                    comparison["east"]["location"] = res["name"]
+
                 if res["latitude"] < comparison["south"]["value"]:
                     comparison["south"]["value"] = res["latitude"]
                     comparison["south"]["location"] = res["name"]
