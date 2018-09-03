@@ -90,19 +90,19 @@ class Google:
                 res = find_coordinates(x)
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
-                if res["latitude"] < comparison["west"]["value"]:
+                if res["latitude"] < comparison["south"]["value"]:
                     comparison["west"]["value"] = res["latitude"]
                     comparison["west"]["location"] = res["name"]
 
-                if res["latitude"] > comparison["east"]["value"]:
+                if res["latitude"] > comparison["north"]["value"]:
                     comparison["east"]["value"] = res["latitude"]
                     comparison["east"]["location"] = res["name"]
 
-                if res["longitude"] < comparison["south"]["value"]:
+                if res["longitude"] < comparison["west"]["value"]:
                     comparison["south"]["value"] = res["longitude"]
                     comparison["south"]["location"] = res["name"]
 
-                if res["longitude"] > comparison["north"]["value"]:
+                if res["longitude"] > comparison["east"]["value"]:
                     comparison["north"]["value"] = res["longitude"]
                     comparison["north"]["location"] = res["name"]
 
