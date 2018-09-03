@@ -170,12 +170,8 @@ def find_coordinates (msg):
         return "I couldn't find anything on that. Did you make a typo?", "Nothing."
 
     name = ''
-    if len(page.cssselect("span.fn.org")) != 0:
-        name = page.cssselect("span.fn.org")[0].text_content()
-    elif len(page.cssselect("caption.fn.org")) != 0:
-        name = page.cssselect("caption.fn.org")[0].text_content()
-    else:
-        name = page.cssselect("th.fn.org")[0].text_content()
+    if len(page.cssselect(".firstHeading")) != 0:
+        name = page.cssselect(".firstHeading")[0].text_content()
 
 
     information = ""
