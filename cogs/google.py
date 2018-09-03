@@ -64,18 +64,31 @@ class Google:
         words = ctx.message.clean_content.split(" ")
         start = datetime.now()
 
-        res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):])
+        split_locations = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
+        if len(split_locations) == 1:
 
-        embed = discord.Embed(title=res[1],
-                description=res[0],
-                color=0x801ecc)
+            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):])
 
-        end = datetime.now()
-        diff = end - start
+            embed = discord.Embed(title=res[1],
+                    description=res[0],
+                    color=0x801ecc)
 
-        embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+            end = datetime.now()
+            diff = end - start
 
-        await self.client.say("", embed = embed)
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+
+            await self.client.say("", embed = embed)
+
+        else:
+            embed = discord.Embed(title="Comparing Coordinates:",
+                    description="remind voc to add useful stuff here later"],
+                    color=0x801ecc)
+            for x in split_locations:
+                res = find_coordinates(split_locations[x])
+                embed.add_field(name=res[1], value=res[0], inline=False)
+            await self.client.say("", embed = embed)
+
 
 
 def height(msg, cmd):
