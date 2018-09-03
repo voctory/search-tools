@@ -198,7 +198,6 @@ def find_coordinates (msg):
         longitude = float(longitude.replace("W", "")) * -1
 
     res = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
-    print(res)
     return res
 
 def setup(client):
