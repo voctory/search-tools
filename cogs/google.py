@@ -85,7 +85,7 @@ class Google:
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
             for x in split_locations:
-                res = find_coordinates(split_locations[x])
+                res = find_coordinates(x)
                 embed.add_field(name=res[1], value=res[0], inline=False)
             await self.client.say("", embed = embed)
 
