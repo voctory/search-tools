@@ -224,7 +224,7 @@ def find_birthday (msg):
     raw = get('https://www.google.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
 
-    if len(page.cssselect("div.cC4Myd")) == 0:
+    if len(page.cssselect("span.cC4Myd")) == 0:
         return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
 
     name = page.cssselect("div.FSP1Dd")[0].text_content()
