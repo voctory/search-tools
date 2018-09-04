@@ -67,9 +67,10 @@ class Google:
                 try:
                     date = datetime.strptime(released, '%B %d %Y').date()
                 except:
-                    date = datetime.strptime(released, '%Y').date()
-                except:
-                    date = datetime.strptime(released, '%B %Y').date()
+                    try:
+                        date = datetime.strptime(released, '%Y').date()
+                    except:
+                        date = datetime.strptime(released, '%B %Y').date()
 
                 if comparison["youngest"]["name"] == False:
                     comparison["youngest"]["name"] = res["name"]
@@ -130,9 +131,10 @@ class Google:
                 try:
                     date = datetime.strptime(released, '%B %d %Y').date()
                 except:
-                    date = datetime.strptime(released, '%Y').date()
-                except:
-                    date = datetime.strptime(released, '%B %Y').date()
+                    try:
+                        date = datetime.strptime(released, '%Y').date()
+                    except:
+                        date = datetime.strptime(released, '%B %Y').date()
 
                 if comparison["youngest"]["name"] == False:
                     comparison["youngest"]["name"] = res["name"]
@@ -193,9 +195,10 @@ class Google:
                 try:
                     date = datetime.strptime(released, '%B %d %Y').date()
                 except:
-                    date = datetime.strptime(released, '%Y').date()
-                except:
-                    date = datetime.strptime(released, '%B %Y').date()
+                    try:
+                        date = datetime.strptime(released, '%Y').date()
+                    except:
+                        date = datetime.strptime(released, '%B %Y').date()
 
                 if comparison["youngest"]["name"] == False:
                     comparison["youngest"]["name"] = res["name"]
