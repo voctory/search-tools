@@ -341,7 +341,7 @@ def find_birthday (msg):
 
 def find_published (msg):
 
-    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    raw = get('https://www.google.com/search?q={} publication date'.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect("span.cC4Myd")) == 0:
@@ -360,7 +360,7 @@ def find_published (msg):
 
 def find_release (msg):
 
-    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    raw = get('https://www.google.com/search?q={} release date'.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect("span.cC4Myd")) == 0:
