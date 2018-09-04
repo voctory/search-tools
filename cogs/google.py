@@ -385,7 +385,7 @@ def find_coordinates (msg):
 
     link = ''
 
-    for result in pg.cssselect(".r a"):
+    for result in page.cssselect(".r a"):
         url = result.get("href")
         if url.startswith("/url?"):
             url = parse_qs(urlparse(url).query)['q']
