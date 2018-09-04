@@ -218,7 +218,7 @@ class Google:
 
         await self.client.say("", embed = embed)
 
-    @commands.command(pass_context=True, aliases=['coords'])
+    @commands.command(pass_context=True, aliases=['coords', 'cd', 'cds'])
     async def coordinates(self, ctx):
         words = ctx.message.clean_content.split(" ")
         start = datetime.now()
@@ -379,7 +379,21 @@ def find_release (msg):
 
 def find_coordinates (msg):
 
-    raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
+
+    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    page = fromstring(raw)
+
+    link = ''
+
+    for result in pg.cssselect(".r a"):
+        url = result.get("href")
+        if url.startswith("/url?"):
+            url = parse_qs(urlparse(url).query)['q']
+        if "wikipedia" in url[0]:
+            link = url[0]
+            break
+
+    raw = get(link.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
