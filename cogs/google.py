@@ -86,6 +86,63 @@ class Google:
             embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
+    @commands.command(pass_context=True, aliases=['pub', 'publish'])
+    async def published(self, ctx):
+        words = ctx.message.clean_content.split(" ")
+        start = datetime.now()
+
+        split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
+        if len(split_names) == 1:
+
+            res = find_published(split_names[0])
+            print(res)
+
+            embed = discord.Embed(title=res["name"],
+                    description=res["info"],
+                    color=0x801ecc)
+
+            end = datetime.now()
+            diff = end - start
+
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+
+            await self.client.say("", embed = embed)
+
+        else:
+            comparison = {'youngest': {'value': 0, 'name': False}, 'oldest': {'value': 0, 'name': False}}
+
+            embed = discord.Embed(title="Comparing Publish Date:",
+                    description="remind voc to add useful stuff here later",
+                    color=0x801ecc)
+            for x in split_names:
+                res = find_published(x)
+                embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+                # convert date to datetime
+                date = datetime.strptime(res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0], '%B %d %Y').date()
+                print(date)
+
+                if comparison["youngest"]["name"] == False:
+                    comparison["youngest"]["name"] = res["name"]
+                    comparison["youngest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
+                    comparison["oldest"]["value"] = date
+
+                if date > comparison["youngest"]["value"]:
+                    comparison["youngest"]["value"] = date
+                    comparison["youngest"]["name"] = res["name"]
+
+                if date < comparison["oldest"]["value"]:
+                    comparison["oldest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
+
+
+            end = datetime.now()
+            diff = end - start
+            embed.description = '**EARLIEST PUBLISHED** is `{}`.\n**LATEST PUBLISHED** is `{}`.'.format(comparison["youngest"]["name"], comparison["oldest"]["name"])
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+            await self.client.say("", embed = embed)
+
     @commands.command(pass_context=True)
     async def find(self, ctx):
         words = ctx.message.clean_content.split(" ")
@@ -220,6 +277,25 @@ def find_birthday (msg):
     for i in range(0, len(page.cssselect(".cC4Myd"))):
         # identify the birthdate
         if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Born:":
+            information = page.cssselect("span.A1t5ne")[i].text_content()
+
+    res = {'info': information, 'name': name}
+    return res
+
+def find_published (msg):
+
+    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect("span.cC4Myd")) == 0:
+        return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
+
+    name = page.cssselect("div.FSP1Dd")[0].text_content()
+
+    information = ""
+    for i in range(0, len(page.cssselect(".cC4Myd"))):
+        # identify the birthdate
+        if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Originally published:":
             information = page.cssselect("span.A1t5ne")[i].text_content()
 
     res = {'info': information, 'name': name}
