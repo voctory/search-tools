@@ -380,7 +380,7 @@ def find_release (msg):
 def find_coordinates (msg):
 
 
-    raw = get('https://www.google.com/search?q={}'.format(msg)).text
+    raw = get('https://www.google.com/search?q={} wikipedia location'.format(msg)).text
     page = fromstring(raw)
 
     link = ''
