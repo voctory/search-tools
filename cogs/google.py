@@ -367,7 +367,9 @@ def find_birthday (msg):
 
     if len(page.cssselect(".bday")) == 0:
         # TODO: fix this
-        return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+        # return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+
+        return find_birthday_alt(msg)
 
     name = page.cssselect(".firstHeading")[0].text_content()
 
