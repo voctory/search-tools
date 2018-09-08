@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 
 from datetime import datetime
+from dateutil import relativedelta
 
 import requests
 import json
@@ -373,8 +374,9 @@ def find_birthday (msg):
 
     name = page.cssselect(".firstHeading")[0].text_content()
 
-    information = page.cssselect(".bday")[0].text_content()
-    information = datetime.strftime(datetime.strptime(information, '%Y-%m-%d'), '%B %d, %Y')
+    date = page.cssselect(".bday")[0].text_content()
+    information = datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%B %d, %Y')
+    information += " (age {} years)".format(relativedelta.relativedelta(datetime.now(), date).years)
 
     res = {'info': information, 'name': name}
     return res
