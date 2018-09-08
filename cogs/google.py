@@ -341,7 +341,7 @@ def find (msg):
 
     return information, name
 
-def find_birthday (msg):
+def find_birthday_alt (msg):
 
     raw = get('https://www.google.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
@@ -356,6 +356,22 @@ def find_birthday (msg):
         # identify the birthdate
         if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Born:":
             information = page.cssselect("span.A1t5ne")[i].text_content()
+
+    res = {'info': information, 'name': name}
+    return res
+
+def find_birthday (msg):
+
+    raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect("span.bday")) == 0:
+        # TODO: fix this
+        return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+
+    name = page.cssselect("div.firstHeading")[0].text_content()
+
+    information = page.cssselect("span.bday")[0].text_content()
 
     res = {'info': information, 'name': name}
     return res
