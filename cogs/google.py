@@ -401,20 +401,7 @@ def find_release (msg):
 def find_coordinates (msg):
 
 
-    raw = get('https://www.google.com/search?q={} wikipedia location'.format(msg)).text
-    page = fromstring(raw)
-
-    link = ''
-
-    for result in page.cssselect(".r a"):
-        url = result.get("href")
-        if url.startswith("/url?"):
-            url = parse_qs(urlparse(url).query)['q']
-        if "wikipedia" in url[0]:
-            link = url[0]
-            break
-
-    raw = get(link.format(msg)).text
+    raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
