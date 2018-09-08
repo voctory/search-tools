@@ -365,13 +365,13 @@ def find_birthday (msg):
     raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
     page = fromstring(raw)
 
-    if len(page.cssselect("span.bday")) == 0:
+    if len(page.cssselect(".bday")) == 0:
         # TODO: fix this
         return "I couldn't find anything on that. Did you make a typo?", "Nothing."
 
-    name = page.cssselect("div.firstHeading")[0].text_content()
+    name = page.cssselect(".firstHeading")[0].text_content()
 
-    information = page.cssselect("span.bday")[0].text_content()
+    information = page.cssselect(".bday")[0].text_content()
 
     res = {'info': information, 'name': name}
     return res
