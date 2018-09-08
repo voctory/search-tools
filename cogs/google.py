@@ -374,8 +374,8 @@ def find_birthday (msg):
 
     name = page.cssselect(".firstHeading")[0].text_content()
 
-    date = page.cssselect(".bday")[0].text_content()
-    information = datetime.strftime(datetime.strptime(date, '%Y-%m-%d'), '%B %d, %Y')
+    date = datetime.strptime(page.cssselect(".bday")[0].text_content(), '%Y-%m-%d')
+    information = datetime.strftime(date, '%B %d, %Y')
     information += " (age {} years)".format(relativedelta.relativedelta(datetime.now(), information).years)
 
     res = {'info': information, 'name': name}
