@@ -222,6 +222,70 @@ class Google:
             embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
             await self.client.say("", embed = embed)
 
+    @commands.command(pass_context=True, aliases=['fil', 'movie'])
+    async def film(self, ctx):
+        words = ctx.message.clean_content.split(" ")
+        start = datetime.now()
+
+        split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
+        if len(split_names) == 1:
+
+            res = film_release(split_names[0])
+            print(res)
+
+            embed = discord.Embed(title=res["name"],
+                    description=res["info"],
+                    color=0x801ecc)
+
+            end = datetime.now()
+            diff = end - start
+
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+
+            await self.client.say("", embed = embed)
+
+        else:
+            comparison = {'youngest': {'value': 0, 'name': False}, 'oldest': {'value': 0, 'name': False}}
+
+            embed = discord.Embed(title="Comparing Release Date:",
+                    description="remind voc to add useful stuff here later",
+                    color=0x801ecc)
+            for x in split_names:
+                res = film_release(x)
+                embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+                # convert date to datetime
+                released = res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0]
+                date = ''
+                try:
+                    date = datetime.strptime(released, '%B %d %Y').date()
+                except:
+                    try:
+                        date = datetime.strptime(released, '%Y').date()
+                    except:
+                        date = datetime.strptime(released, '%B %Y').date()
+
+                if comparison["youngest"]["name"] == False:
+                    comparison["youngest"]["name"] = res["name"]
+                    comparison["youngest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
+                    comparison["oldest"]["value"] = date
+
+                if date > comparison["youngest"]["value"]:
+                    comparison["youngest"]["value"] = date
+                    comparison["youngest"]["name"] = res["name"]
+
+                if date < comparison["oldest"]["value"]:
+                    comparison["oldest"]["value"] = date
+                    comparison["oldest"]["name"] = res["name"]
+
+
+            end = datetime.now()
+            diff = end - start
+            embed.description = '**LATEST RELEASED** is `{}`.\n**EARLIEST RELEASED** is `{}`.'.format(comparison["youngest"]["name"], comparison["oldest"]["name"])
+            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+            await self.client.say("", embed = embed)
+
     @commands.command(pass_context=True)
     async def find(self, ctx):
         words = ctx.message.clean_content.split(" ")
@@ -401,6 +465,45 @@ def find_published (msg):
     return res
 
 def find_release (msg):
+
+    raw = get('https://www.google.com/search?q={} release date'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect("span.cC4Myd")) == 0:
+        return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
+
+    name = page.cssselect("div.FSP1Dd")[0].text_content()
+
+    information = ""
+    for i in range(0, len(page.cssselect(".cC4Myd"))):
+        # identify the birthdate
+        if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Release date:":
+            information = page.cssselect("span.A1t5ne")[i].text_content()
+
+    res = {'info': information, 'name': name}
+    return res
+
+def film_release (msg):
+
+    raw = get('https://en.wikipedia.org/wiki/{} (film)'.format(msg)).text
+    page = fromstring(raw)
+
+    if len(page.cssselect(".bday")) == 0:
+        # TODO: fix this
+        # return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+
+        return film_release_alt(msg)
+
+    name = page.cssselect(".firstHeading")[0].text_content()
+
+    date = datetime.strptime(page.cssselect(".bday")[0].text_content(), '%Y-%m-%d')
+    information = datetime.strftime(date, '%B %d, %Y')
+    information += " (age {} years)".format(relativedelta.relativedelta(datetime.now().date(), date.date()).years)
+
+    res = {'info': information, 'name': name}
+    return res
+
+def film_release_alt (msg):
 
     raw = get('https://www.google.com/search?q={} release date'.format(msg)).text
     page = fromstring(raw)
