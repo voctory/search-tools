@@ -374,7 +374,7 @@ def find_birthday (msg):
     name = page.cssselect(".firstHeading")[0].text_content()
 
     information = page.cssselect(".bday")[0].text_content()
-    information = datetime.strftime(datetime.strptime(information, '%Y-%m-%d'), '%M %d, %Y')
+    information = datetime.strftime(datetime.strptime(information, '%Y-%m-%d'), '%B %d, %Y')
 
     res = {'info': information, 'name': name}
     return res
