@@ -58,8 +58,8 @@ class Google:
             embed = discord.Embed(title="Comparing Birthdates:",
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
-            for x in split_names:
-                res = find_birthday(x)
+            async for x in split_names:
+                res = await find_birthday(x)
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 # convert date to datetime
@@ -425,7 +425,7 @@ def find_birthday_alt (msg):
     res = {'info': information, 'name': name}
     return res
 
-def find_birthday (msg):
+async def find_birthday (msg):
 
     raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
     page = fromstring(raw)
@@ -443,7 +443,7 @@ def find_birthday (msg):
     information += " (age {} years)".format(relativedelta.relativedelta(datetime.now().date(), date.date()).years)
 
     res = {'info': information, 'name': name}
-    return res
+    return await res
 
 def find_published (msg):
 
