@@ -443,7 +443,7 @@ async def find_birthday (msg):
     information += " (age {} years)".format(relativedelta.relativedelta(datetime.now().date(), date.date()).years)
 
     res = {'info': information, 'name': name}
-    return await res
+    return res
 
 def find_published (msg):
 
