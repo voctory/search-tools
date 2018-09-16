@@ -38,7 +38,7 @@ class Google:
         split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
         if len(split_names) == 1:
 
-            res = find_birthday(split_names[0])
+            res = await find_birthday(split_names[0])
             print(res)
 
             embed = discord.Embed(title=res["name"],
