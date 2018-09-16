@@ -58,7 +58,7 @@ class Google:
             embed = discord.Embed(title="Comparing Birthdates:",
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
-            async for x in split_names:
+            for x in split_names:
                 res = await find_birthday(x)
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
