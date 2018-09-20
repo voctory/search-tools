@@ -42,11 +42,11 @@ def find (msg):
     raw = get('https://www.bing.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
 
-    if len(page.cssselect(".b_focusTextMedium")) == 0:
+    if len(page.cssselect("div.b_focusTextMedium")) == 0:
         return "I couldn't find anything on that. Maybe specifying if it's a film or movie would help?", "Nothing."
 
-    name = page.cssselect(".b_focusLabel")[0].text_content()
-    information = page.cssselect(".b_focusTextMedium")[0].text_content()
+    name = page.cssselect("div.b_focusLabel")[0].text_content()
+    information = page.cssselect("div.b_focusTextMedium")[0].text_content()
 
     return information, name
 
