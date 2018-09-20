@@ -40,6 +40,7 @@ class Google:
 def find (msg):
 
     raw = get('https://www.bing.com/search?q={}'.format(msg)).text
+    print(raw)
     page = fromstring(raw)
 
     if len(page.cssselect("div.b_focusTextMedium")) == 0:
