@@ -39,63 +39,63 @@ class Google:
         start = datetime.now()
 
         split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
-        if len(split_names) == 1:
 
-            res = await find_birthday(split_names[0])
-            print(res)
+        comparison = {'youngest': {'value': 0, 'name': False}, 'oldest': {'value': 0, 'name': False}}
 
-            embed = discord.Embed(title=res["name"],
-                    description=res["info"],
-                    color=0x801ecc)
+        embed = discord.Embed(title="Comparing Birthdates:",
+                description="remind voc to add useful stuff here later",
+                color=0x801ecc)
 
-            end = datetime.now()
-            diff = end - start
-
-            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
-
-            await self.client.say("", embed = embed)
-
+        if len(split_age) == 1:
+            results = [{}]
         else:
-            comparison = {'youngest': {'value': 0, 'name': False}, 'oldest': {'value': 0, 'name': False}}
+            results = [{} for x in split_age]
 
-            embed = discord.Embed(title="Comparing Birthdates:",
-                    description="remind voc to add useful stuff here later",
-                    color=0x801ecc)
-            for x in split_names:
-                res = await find_birthday(x)
-                embed.add_field(name=res["name"], value=res["info"], inline=False)
+        threads = []
+        for ii in range(len(split_age)):
+            # We start one thread per url present.
+            process = Thread(target=find_birthday, args=[split_age[ii], results, ii])
+            process.start()
+            threads.append(process)
 
-                # convert date to datetime
-                released = res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0]
-                date = ''
+        for process in threads:
+            process.join()
+
+        for x in results:
+            res = x
+            embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+            # convert date to datetime
+            released = res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0]
+            date = ''
+            try:
+                date = datetime.strptime(released, '%B %d %Y').date()
+            except:
                 try:
-                    date = datetime.strptime(released, '%B %d %Y').date()
+                    date = datetime.strptime(released, '%Y').date()
                 except:
-                    try:
-                        date = datetime.strptime(released, '%Y').date()
-                    except:
-                        date = datetime.strptime(released, '%B %Y').date()
+                    date = datetime.strptime(released, '%B %Y').date()
 
-                if comparison["youngest"]["name"] == False:
-                    comparison["youngest"]["name"] = res["name"]
-                    comparison["youngest"]["value"] = date
-                    comparison["oldest"]["name"] = res["name"]
-                    comparison["oldest"]["value"] = date
+            if comparison["youngest"]["name"] == False:
+                comparison["youngest"]["name"] = res["name"]
+                comparison["youngest"]["value"] = date
+                comparison["oldest"]["name"] = res["name"]
+                comparison["oldest"]["value"] = date
 
-                if date > comparison["youngest"]["value"]:
-                    comparison["youngest"]["value"] = date
-                    comparison["youngest"]["name"] = res["name"]
+            if date > comparison["youngest"]["value"]:
+                comparison["youngest"]["value"] = date
+                comparison["youngest"]["name"] = res["name"]
 
-                if date < comparison["oldest"]["value"]:
-                    comparison["oldest"]["value"] = date
-                    comparison["oldest"]["name"] = res["name"]
+            if date < comparison["oldest"]["value"]:
+                comparison["oldest"]["value"] = date
+                comparison["oldest"]["name"] = res["name"]
 
 
-            end = datetime.now()
-            diff = end - start
-            embed.description = '**YOUNGEST** is `{}`.\n**OLDEST** is `{}`.'.format(comparison["youngest"]["name"], comparison["oldest"]["name"])
-            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
-            await self.client.say("", embed = embed)
+        end = datetime.now()
+        diff = end - start
+        embed.description = '**YOUNGEST** is `{}`.\n**OLDEST** is `{}`.'.format(comparison["youngest"]["name"], comparison["oldest"]["name"])
+        embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+        await self.client.say("", embed = embed)
 
     @commands.command(pass_context=True, aliases=['pub', 'publish'])
     async def published(self, ctx):
@@ -428,7 +428,7 @@ def find_birthday_alt (msg):
     res = {'info': information, 'name': name}
     return res
 
-async def find_birthday (msg):
+def find_birthday (msg, result, index):
 
     raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
     page = fromstring(raw)
@@ -445,8 +445,8 @@ async def find_birthday (msg):
     information = datetime.strftime(date, '%B %d, %Y')
     information += " (age {} years)".format(relativedelta.relativedelta(datetime.now().date(), date.date()).years)
 
-    res = {'info': information, 'name': name}
-    return res
+    result[index] = {'info': information, 'name': name}
+    return True
 
 def find_published (msg):
 
