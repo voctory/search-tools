@@ -46,15 +46,15 @@ class Google:
                 description="remind voc to add useful stuff here later",
                 color=0x801ecc)
 
-        if len(split_age) == 1:
+        if len(split_names) == 1:
             results = [{}]
         else:
-            results = [{} for x in split_age]
+            results = [{} for x in split_names]
 
         threads = []
-        for ii in range(len(split_age)):
+        for ii in range(len(split_names)):
             # We start one thread per url present.
-            process = Thread(target=find_birthday, args=[split_age[ii], results, ii])
+            process = Thread(target=find_birthday, args=[split_names[ii], results, ii])
             process.start()
             threads.append(process)
 
