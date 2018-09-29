@@ -340,7 +340,7 @@ class Google:
             task1 = loop.create_task(coroutine1)
             task2 = loop.create_task(coroutine2)
             task3 = loop.create_task(coroutine3)
-            loop.run_until_complete(asyncio.wait([task1, task2, task3]))
+            loop.run_coroutine_threadsafe(asyncio.wait([task1, task2, task3]))
             async_res = [task1, task2, task3]
 
             for x in async_res:
