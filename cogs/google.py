@@ -316,7 +316,8 @@ class Google:
         if len(split_locations) == 1:
 
             results = [{}]
-            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):], results, 0)[0]
+            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):], results, 0)
+            print(res)
 
             embed = discord.Embed(title=res["name"],
                     description=res["info"],
@@ -548,7 +549,7 @@ def find_coordinates (msg, result, index):
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
-        result = {}
+        result[index] = {}
         return True
 
     name = ''
@@ -575,7 +576,7 @@ def find_coordinates (msg, result, index):
     else:
         longitude = float(longitude.replace("W", "")) * -1
 
-    result = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
+    result[index] = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
     return True
 
 def setup(client):
