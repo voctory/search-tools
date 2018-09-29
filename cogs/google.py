@@ -319,8 +319,11 @@ class Google:
                 description="remind voc to add useful stuff here later",
                 color=0x801ecc)
 
-        results = [{} for x in split_locations]
-        print(results)
+        if len(split_locations) !== 1:
+            results = [{} for x in split_locations]
+        else:
+            results = [{}]
+
         threads = []
         for ii in range(len(split_locations)):
             # We start one thread per url present.
@@ -330,8 +333,6 @@ class Google:
 
         for process in threads:
             process.join()
-
-        print(results)
 
         for x in results:
             res = x
