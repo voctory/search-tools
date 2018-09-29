@@ -351,8 +351,8 @@ class Google:
 
             print(results)
 
-            for x in async_res:
-                res = async_res[x]
+            for x in results:
+                res = results[x]
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 if comparison["south"]["location"] == False:
