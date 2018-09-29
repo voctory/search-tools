@@ -313,80 +313,62 @@ class Google:
         start = datetime.now()
 
         split_locations = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
-        if len(split_locations) == 1:
+        comparison = {'west': {'value': 0, 'location': False}, 'east': {'value': 0, 'location': False}, 'north': {'value': 0, 'location': False}, 'south': {'value': 0, 'location': False}}
 
-            results = [{}]
-            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):], results, 0)
-            print(res)
+        embed = discord.Embed(title="Comparing Coordinates:",
+                description="remind voc to add useful stuff here later",
+                color=0x801ecc)
 
-            embed = discord.Embed(title=res["name"],
-                    description=res["info"],
-                    color=0x801ecc)
+        results = [{} for x in split_locations]
+        print(results)
+        threads = []
+        for ii in range(len(split_locations)):
+            # We start one thread per url present.
+            process = Thread(target=find_coordinates, args=[split_locations[ii], results, ii])
+            process.start()
+            threads.append(process)
 
-            end = datetime.now()
-            diff = end - start
+        for process in threads:
+            process.join()
 
-            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+        print(results)
 
-            await self.client.say("", embed = embed)
+        for x in results:
+            res = x
+            embed.add_field(name=res["name"], value=res["info"], inline=False)
 
-        else:
-            comparison = {'west': {'value': 0, 'location': False}, 'east': {'value': 0, 'location': False}, 'north': {'value': 0, 'location': False}, 'south': {'value': 0, 'location': False}}
+            if comparison["south"]["location"] == False:
+                comparison["south"]["value"] = res["latitude"]
+                comparison["south"]["location"] = res["name"]
+                comparison["north"]["value"] = res["latitude"]
+                comparison["north"]["location"] = res["name"]
+                comparison["west"]["value"] = res["longitude"]
+                comparison["west"]["location"] = res["name"]
+                comparison["east"]["value"] = res["longitude"]
+                comparison["east"]["location"] = res["name"]
 
-            embed = discord.Embed(title="Comparing Coordinates:",
-                    description="remind voc to add useful stuff here later",
-                    color=0x801ecc)
+            if res["latitude"] < comparison["south"]["value"]:
+                comparison["south"]["value"] = res["latitude"]
+                comparison["south"]["location"] = res["name"]
 
-            results = [{} for x in split_locations]
-            print(results)
-            threads = []
-            for ii in range(len(split_locations)):
-                # We start one thread per url present.
-                process = Thread(target=find_coordinates, args=[split_locations[ii], results, ii])
-                process.start()
-                threads.append(process)
+            if res["latitude"] > comparison["north"]["value"]:
+                comparison["north"]["value"] = res["latitude"]
+                comparison["north"]["location"] = res["name"]
 
-            for process in threads:
-                process.join()
+            if res["longitude"] < comparison["west"]["value"]:
+                comparison["west"]["value"] = res["longitude"]
+                comparison["west"]["location"] = res["name"]
 
-            print(results)
-
-            for x in results:
-                res = x
-                embed.add_field(name=res["name"], value=res["info"], inline=False)
-
-                if comparison["south"]["location"] == False:
-                    comparison["south"]["value"] = res["latitude"]
-                    comparison["south"]["location"] = res["name"]
-                    comparison["north"]["value"] = res["latitude"]
-                    comparison["north"]["location"] = res["name"]
-                    comparison["west"]["value"] = res["longitude"]
-                    comparison["west"]["location"] = res["name"]
-                    comparison["east"]["value"] = res["longitude"]
-                    comparison["east"]["location"] = res["name"]
-
-                if res["latitude"] < comparison["south"]["value"]:
-                    comparison["south"]["value"] = res["latitude"]
-                    comparison["south"]["location"] = res["name"]
-
-                if res["latitude"] > comparison["north"]["value"]:
-                    comparison["north"]["value"] = res["latitude"]
-                    comparison["north"]["location"] = res["name"]
-
-                if res["longitude"] < comparison["west"]["value"]:
-                    comparison["west"]["value"] = res["longitude"]
-                    comparison["west"]["location"] = res["name"]
-
-                if res["longitude"] > comparison["east"]["value"]:
-                    comparison["east"]["value"] = res["longitude"]
-                    comparison["east"]["location"] = res["name"]
+            if res["longitude"] > comparison["east"]["value"]:
+                comparison["east"]["value"] = res["longitude"]
+                comparison["east"]["location"] = res["name"]
 
 
-            end = datetime.now()
-            diff = end - start
-            embed.description = 'Furthest **NORTH** is `{}`.\nFurthest **SOUTH** is `{}`.\nFurthest **EAST** is `{}`.\nFurthest **WEST** is `{}`.\n'.format(comparison["north"]["location"], comparison["south"]["location"], comparison["east"]["location"], comparison["west"]["location"])
-            embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
-            await self.client.say("", embed = embed)
+        end = datetime.now()
+        diff = end - start
+        embed.description = 'Furthest **NORTH** is `{}`.\nFurthest **SOUTH** is `{}`.\nFurthest **EAST** is `{}`.\nFurthest **WEST** is `{}`.\n'.format(comparison["north"]["location"], comparison["south"]["location"], comparison["east"]["location"], comparison["west"]["location"])
+        embed.set_footer(text='Took {} milliseconds to process.'.format(round((diff.days * 86400000) + (diff.seconds * 1000) + (diff.microseconds / 1000))))
+        await self.client.say("", embed = embed)
 
 
 
