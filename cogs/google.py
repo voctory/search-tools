@@ -409,7 +409,7 @@ def find (msg):
 
     return information, name
 
-def find_birthday_alt (msg):
+def find_birthday_alt (msg, result, index):
 
     raw = get('https://www.google.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
@@ -425,8 +425,8 @@ def find_birthday_alt (msg):
         if page.cssselect("span.cC4Myd")[i].text_content().strip() == "Born:":
             information = page.cssselect("span.A1t5ne")[i].text_content()
 
-    res = {'info': information, 'name': name}
-    return res
+    result[index] = {'info': information, 'name': name}
+    return True
 
 def find_birthday (msg, result, index):
 
@@ -437,7 +437,7 @@ def find_birthday (msg, result, index):
         # TODO: fix this
         # return "I couldn't find anything on that. Did you make a typo?", "Nothing."
 
-        return find_birthday_alt(msg)
+        return find_birthday_alt(msg, result, index)
 
     name = page.cssselect(".firstHeading")[0].text_content()
 
