@@ -315,7 +315,8 @@ class Google:
         split_locations = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
         if len(split_locations) == 1:
 
-            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):])
+            results = [{}]
+            res = find_coordinates(ctx.message.content[ctx.message.content.index(words[1]):], results, 0)[0]
 
             embed = discord.Embed(title=res["name"],
                     description=res["info"],
@@ -340,7 +341,7 @@ class Google:
             threads = []
             for ii in range(len(split_locations)):
                 # We start one thread per url present.
-                process = Thread(target=find_coordinates, args=[split_locations[ii], result, ii])
+                process = Thread(target=find_coordinates, args=[split_locations[ii], results, ii])
                 process.start()
                 threads.append(process)
 
