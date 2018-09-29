@@ -352,7 +352,7 @@ class Google:
             print(results)
 
             for x in results:
-                res = results[x]
+                res = x
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 if comparison["south"]["location"] == False:
