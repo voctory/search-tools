@@ -14,6 +14,8 @@ import json
 import lxml
 
 import asyncio
+from threading import Thread
+
 
 class Google:
     def __init__(self, client):
@@ -333,15 +335,19 @@ class Google:
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
 
-            loop = asyncio.new_event_loop()
-            coroutine1 = find_coordinates(split_locations[0])
-            coroutine2 = find_coordinates(split_locations[1])
-            coroutine3 = find_coordinates(split_locations[2])
-            task1 = loop.create_task(coroutine1)
-            task2 = loop.create_task(coroutine2)
-            task3 = loop.create_task(coroutine3)
-            loop.run_coroutine_threadsafe(asyncio.wait([task1, task2, task3]))
-            async_res = [task1, task2, task3]
+            results = [{} for x in split_locations]
+            print(results)
+            threads = []
+            for ii in range(len(split_locations)):
+                # We start one thread per url present.
+                process = Thread(target=find_coordinates, args=[split_locations[ii], result, ii])
+                process.start()
+                threads.append(process)
+
+            for process in threads:
+                process.join()
+
+            print(results)
 
             for x in async_res:
                 res = async_res[x]
@@ -534,14 +540,15 @@ def film_release_alt (msg):
     res = {'info': information, 'name': name}
     return res
 
-def find_coordinates (msg):
+def find_coordinates (msg, result, index):
 
 
     raw = get('https://en.wikipedia.org/wiki/{}'.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
-        return "I couldn't find anything on that. Did you make a typo?", "Nothing."
+        result = {}
+        return True
 
     name = ''
     if len(page.cssselect(".firstHeading")) != 0:
@@ -567,8 +574,8 @@ def find_coordinates (msg):
     else:
         longitude = float(longitude.replace("W", "")) * -1
 
-    res = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
-    return res
+    result = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
+    return True
 
 def setup(client):
     client.add_cog(Google(client))
