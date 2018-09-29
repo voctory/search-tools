@@ -13,6 +13,7 @@ import requests
 import json
 import lxml
 
+import asyncio
 
 class Google:
     def __init__(self, client):
@@ -331,8 +332,19 @@ class Google:
             embed = discord.Embed(title="Comparing Coordinates:",
                     description="remind voc to add useful stuff here later",
                     color=0x801ecc)
-            for x in split_locations:
-                res = find_coordinates(x)
+
+            loop = asyncio.new_event_loop()
+            coroutine1 = find_coordinates(split_locations[0])
+            coroutine2 = find_coordinates(split_locations[1])
+            coroutine3 = find_coordinates(split_locations[2])
+            task1 = loop.create_task(coroutine1)
+            task2 = loop.create_task(coroutine2)
+            task3 = loop.create_task(coroutine3)
+            loop.run_until_complete(asycnio.wait([task1, task2, task3]))
+            async_res = [task1, task2, task3]
+
+            for x in async_res:
+                res = async_res[x]
                 embed.add_field(name=res["name"], value=res["info"], inline=False)
 
                 if comparison["south"]["location"] == False:
