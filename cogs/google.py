@@ -426,6 +426,7 @@ def find (msg, result, index):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
 
     result[index] = {'info': information, 'name': name}
+    print(result[index])
     return True
 
 def find_birthday_alt (msg, result, index):
