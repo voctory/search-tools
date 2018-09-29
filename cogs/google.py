@@ -296,6 +296,9 @@ class Google:
 
         split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
 
+        embed = discord.Embed(title="Find Command",
+                color=0x801ecc)
+
         if len(split_names) == 1:
             results = [{}]
         else:
@@ -314,9 +317,6 @@ class Google:
         for x in results:
             res = x
             embed.add_field(name=res["name"], value=res["info"], inline=False)
-
-        embed = discord.Embed(title="Find Command",
-                color=0x801ecc)
 
         end = datetime.now()
         diff = end - start
@@ -426,7 +426,6 @@ def find (msg, result, index):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
 
     result[index] = {'info': information, 'name': name}
-    print(result[index])
     return True
 
 def find_birthday_alt (msg, result, index):
