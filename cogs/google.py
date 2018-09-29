@@ -319,10 +319,10 @@ class Google:
                 description="remind voc to add useful stuff here later",
                 color=0x801ecc)
 
-        if len(split_locations) !== 1:
-            results = [{} for x in split_locations]
-        else:
+        if len(split_locations) == 1:
             results = [{}]
+        else:
+            results = [{} for x in split_locations]
 
         threads = []
         for ii in range(len(split_locations)):
