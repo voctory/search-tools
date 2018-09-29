@@ -294,10 +294,28 @@ class Google:
         words = ctx.message.clean_content.split(" ")
         start = datetime.now()
 
-        res = find(ctx.message.content[ctx.message.content.index(words[1]):])
+        split_names = ctx.message.clean_content[ctx.message.clean_content.index(words[1]):].split(",")
 
-        embed = discord.Embed(title=res[1],
-                description=res[0],
+        if len(split_names) == 1:
+            results = [{}]
+        else:
+            results = [{} for x in split_names]
+
+        threads = []
+        for ii in range(len(split_names)):
+            # We start one thread per url present.
+            process = Thread(target=find, args=[split_names[ii], results, ii])
+            process.start()
+            threads.append(process)
+
+        for process in threads:
+            process.join()
+
+        for x in results:
+            res = x
+            embed.add_field(name=res["name"], value=res["info"], inline=False)
+
+        embed = discord.Embed(title="Find Command",
                 color=0x801ecc)
 
         end = datetime.now()
@@ -393,7 +411,7 @@ def age(msg):
     return '{}\n{}'.format(birthdate, birthplace)
 
 
-def find (msg):
+def find (msg, result, index):
 
     raw = get('https://www.google.com/search?q={}'.format(msg)).text
     page = fromstring(raw)
@@ -407,7 +425,8 @@ def find (msg):
     for i in range(0, len(page.cssselect(".cC4Myd"))):
         information += '**{}** {}\n'.format(page.cssselect("span.cC4Myd")[i].text_content(), page.cssselect("span.A1t5ne")[i].text_content())
 
-    return information, name
+    result[index] = {'info': information, 'name': name}
+    return True
 
 def find_birthday_alt (msg, result, index):
 
