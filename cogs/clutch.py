@@ -23,9 +23,9 @@ class Clutch:
         msg = await self.client.say("", embed=embed)
         await self.client.add_reaction(msg, "👍")
         await self.client.add_reaction(msg, "👎")
-        time.sleep(15)
+        time.sleep(5)
 
-        print(msg.reactions)
+        print(await self.client.get_message(msg.channel, msg.id).reactions)
 
 
 def setup(client):
