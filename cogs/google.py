@@ -561,8 +561,7 @@ def find_coordinates_alt (msg, result, index):
             link = url[0]
             break
 
-    print(link)
-    raw = get(link.format(msg)).text
+    raw = get(link).text
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
@@ -606,7 +605,9 @@ def find_coordinates (msg, result, index):
 
     if len(page.cssselect(".longitude")) == 0:
 
-        return find_coordinates_alt(msg, result, index)
+        result[index] = find_coordinates_alt(msg, result, index)
+        print(result[index])
+        return True
 
     name = ''
     if len(page.cssselect(".firstHeading")) != 0:
