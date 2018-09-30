@@ -104,6 +104,8 @@ class Clutch:
                 description=lb_string,
                 color=0x801ecc)
 
+        await self.client.say("", embed=embed)
+
 def clutchUp(user_id, count):
     # load up saved sets
     with open('data/clutch.json') as data_file:
