@@ -90,7 +90,7 @@ class Clutch:
             sets = json.load(data_file)
 
         print(sets)
-        sorted_x = sorted(x.items(), key=operator.itemgetter(0))
+        sorted_x = sorted(sets.items(), key=operator.itemgetter(0))
         print(sorted_x)
 
 def clutchUp(user_id, count):
