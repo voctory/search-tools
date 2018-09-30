@@ -26,7 +26,7 @@ class Clutch:
         time.sleep(5)
 
         msg = await self.client.get_message(msg.channel, msg.id)
-        print(msg.reactions)
+        print(msg.reactions[0].emoji)
 
 
 def setup(client):
