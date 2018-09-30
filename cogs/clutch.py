@@ -65,6 +65,8 @@ class Clutch:
                 description=f'{ctx.message.author.mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
                 color=0x801ecc)
 
+        await self.client.say("", embed=embed)
+
 
 def clutchUp(user_id):
     # load up saved sets
