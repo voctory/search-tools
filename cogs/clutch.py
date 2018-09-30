@@ -97,8 +97,8 @@ class Clutch:
             if current == 10:
                 break
 
-            current += 1
             lb_string += f'**{current}.** <@{sorted_by_value[current][0]}> ({sorted_by_value[current][1]} points)\n'
+            current += 1
 
         embed = discord.Embed(title="Clutch Leaderboard",
                 description=lb_string,
