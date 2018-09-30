@@ -74,7 +74,8 @@ def clutchUp(user_id):
     if str(user_id) not in list(sets):
         sets[str(user_id)] = 0
 
-    sets[str(user_id)].update(sets[str(user_id)] += 1)
+    sets[str(user_id)] += 1
+    sets[str(user_id)].update(sets[str(user_id)])
     with open('data/clutch.json', 'w') as file:
         file.write(json.dumps(sets))
 
