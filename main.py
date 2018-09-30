@@ -12,8 +12,7 @@ with open('config.json') as data_file:
 client = commands.Bot(command_prefix = data["prefix"])
 
 # load cogs
-extensions = ['cogs.genius',
-            'cogs.google',
+extensions = ['cogs.google',
             'cogs.clutch'
             'cogs.error_handler']
 
