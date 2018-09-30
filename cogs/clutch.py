@@ -26,7 +26,7 @@ class Clutch:
         time.sleep(5)
 
         msg = await self.client.get_message(msg.channel, msg.id)
-        if msg.reactions[0].emoji.count >= 2 and msg.reactions[0].emoji.count > msg.reactions[1].emoji.count:
+        if msg.reactions[0].count >= 2 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say("Vote passed!")
         else:
             await self.client.say("Vote did not pass.")
