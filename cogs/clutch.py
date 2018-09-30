@@ -29,9 +29,13 @@ class Clutch:
             await self.client.say("You are a bot.")
             return
 
+        if ctx.message.mentions[0].bot == True:
+            await self.client.say("You can't clutch a bot.")
+            return
+
         clutch_list.append(ctx.message.mentions[0].id)
 
-        embed = discord.Embed(title="Clutch",
+        embed = discord.Embed(title="Clutch Vote",
                 description=f'React if you believe {ctx.message.mentions[0].mention} has clutched!\nVote within 15 seconds. At least 4 people must agree and it has to be a majority.',
                 color=0x801ecc)
         msg = await self.client.say("", embed=embed)
@@ -47,6 +51,32 @@ class Clutch:
 
         clutch_list.remove(ctx.message.mentions[0].id)
 
+    @commands.command(pass_context=True)
+    async def score(self, ctx):
+        with open('data/clutch.json') as data_file:
+            sets = json.load(data_file)
+
+        if ctx.message.author.id not in list(sets):
+            await self.client.say("You haven't clutched before.")
+            return
+
+        embed = discord.Embed(title="Clutch Score",
+                description=f'{ctx.message.mentions[0].mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
+                color=0x801ecc)
+
+
+def clutchUp(user_id):
+    # load up saved sets
+    with open('data/clutch.json') as data_file:
+        sets = json.load(data_file)
+
+    # adding new dict if user isn't already there
+    if str(user_id) not in list(sets):
+        sets[str(user_id)] = 0
+
+    sets[str(user_id)].update(sets[str(user_id)] += 1)
+    with open('data/clutch.json', 'w') as file:
+        file.write(json.dumps(sets))
 
 def setup(client):
     client.add_cog(Clutch(client))
