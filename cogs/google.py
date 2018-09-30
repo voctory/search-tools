@@ -594,9 +594,7 @@ def find_coordinates_alt (msg, result, index):
     else:
         longitude = float(longitude.replace("W", "")) * -1
 
-    print(information)
-    result[index] = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
-    return True
+    return {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
 
 def find_coordinates (msg, result, index):
 
@@ -607,7 +605,6 @@ def find_coordinates (msg, result, index):
     if len(page.cssselect(".longitude")) == 0:
 
         result[index] = find_coordinates_alt(msg, result, index)
-        print(result[index])
         return True
 
     name = ''
