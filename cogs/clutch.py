@@ -14,7 +14,7 @@ class Clutch:
     @commands.command(pass_context=True)
     async def clutch(self, ctx):
         if len(ctx.message.mentions) == 0:
-            await.client.say("You need to mention someone!")
+            await client.say("You need to mention someone!")
             return
 
         embed = discord.Embed(title="Clutch",
