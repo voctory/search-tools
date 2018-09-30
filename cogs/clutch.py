@@ -62,7 +62,7 @@ class Clutch:
             return
 
         embed = discord.Embed(title="Clutch Score",
-                description=f'{ctx.message.mentions[0].mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
+                description=f'{ctx.message.author.mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
                 color=0x801ecc)
 
 
