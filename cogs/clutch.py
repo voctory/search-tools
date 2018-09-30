@@ -43,12 +43,12 @@ class Clutch:
         await self.client.add_reaction(msg, "👎")
 
         # TODO: adjust to 15
-        await asyncio.sleep(5)
+        await asyncio.sleep(15)
 
         msg = await self.client.get_message(msg.channel, msg.id)
 
         # TODO: reset valeus
-        if msg.reactions[0].count > 1 and msg.reactions[0].count > msg.reactions[1].count:
+        if msg.reactions[0].count > 4 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
             clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
         else:
@@ -116,10 +116,13 @@ def clutchUp(user_id, count):
         sets[str(user_id)] = 0
 
     sets[str(user_id)] += 1
-    if count > 9:
+    if count > 8:
         sets[str(user_id)] += 1
 
-    if count > 13:
+    if count > 10:
+        sets[str(user_id)] += 1
+
+    if count > 14:
         sets[str(user_id)] += 1
 
     with open('data/clutch.json', 'w') as file:
