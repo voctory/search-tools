@@ -16,6 +16,8 @@ import lxml
 import asyncio
 from threading import Thread
 
+from google_images_download import google_images_download
+
 
 class Google:
     def __init__(self, client):
@@ -544,6 +546,56 @@ def film_release_alt (msg):
     res = {'info': information, 'name': name}
     return res
 
+def find_coordinates_alt (msg, result, index):
+
+    raw = get('https://www.google.com/search?q={} wiki'.format(msg)).text
+    page = fromstring(raw)
+
+    link = ''
+
+    for result in pg.cssselect(".r a"):
+        url = result.get("href")
+        if url.startswith("/url?"):
+            url = parse_qs(urlparse(url).query)['q']
+        if "wikipedia" in url[0]:
+            link = url[0]
+            break
+
+    raw = get(link).text
+    page = fromstring(raw)
+
+    if len(page.cssselect(".longitude")) == 0:
+
+        result[index] = {}
+        return True
+
+    name = ''
+    if len(page.cssselect(".firstHeading")) != 0:
+        name = page.cssselect(".firstHeading")[0].text_content()
+
+
+    information = ""
+    latitude = page.cssselect(".latitude")[0].text_content()
+    information += latitude
+    longitude = page.cssselect(".longitude")[0].text_content()
+    information += "\n" + longitude
+
+    latitude = latitude.replace(".", "").replace("°", ".").replace("′", "").replace("″", "")
+    longitude = longitude.replace(".", "").replace("°", ".").replace("′", "").replace("″", "")
+
+    if "N" in latitude:
+        latitude = float(latitude.replace("N", ""))
+    else:
+        latitude = float(latitude.replace("S", "")) * -1
+
+    if "E" in longitude:
+        longitude = float(longitude.replace("E", ""))
+    else:
+        longitude = float(longitude.replace("W", "")) * -1
+
+    result[index] = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
+    return True
+
 def find_coordinates (msg, result, index):
 
 
@@ -551,8 +603,8 @@ def find_coordinates (msg, result, index):
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
-        result[index] = {}
-        return True
+
+        return find_coordinates_alt(msg, result, index)
 
     name = ''
     if len(page.cssselect(".firstHeading")) != 0:
