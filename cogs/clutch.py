@@ -46,6 +46,7 @@ class Clutch:
         msg = await self.client.get_message(msg.channel, msg.id)
         if msg.reactions[0].count >= 2 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
+            clutchUp(ctx.message.mentions[0].id)
         else:
             await self.client.say(f'Vote for {ctx.message.mentions[0].mention} did not pass.')
 
