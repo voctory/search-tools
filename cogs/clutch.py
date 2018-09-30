@@ -37,7 +37,7 @@ class Clutch:
         msg = await self.client.say("", embed=embed)
         await self.client.add_reaction(msg, "👍")
         await self.client.add_reaction(msg, "👎")
-        time.sleep(5)
+        asyncio.sleep(5)
 
         msg = await self.client.get_message(msg.channel, msg.id)
         if msg.reactions[0].count >= 2 and msg.reactions[0].count > msg.reactions[1].count:
