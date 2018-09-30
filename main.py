@@ -14,6 +14,7 @@ client = commands.Bot(command_prefix = data["prefix"])
 # load cogs
 extensions = ['cogs.genius',
             'cogs.google',
+            'cogs.clutch'
             'cogs.error_handler']
 
 # checks for owner perms
