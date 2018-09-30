@@ -4,7 +4,6 @@ from discord.ext import commands
 import json
 import asyncio
 import time
-import operator
 
 clutch_list = []
 
@@ -89,8 +88,8 @@ class Clutch:
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
 
-        sorted_x = sorted(sets.items(), key=operator.itemgetter(0))
-        print(sorted_x)
+        sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1])
+        print(sorted_by_value)
 
 def clutchUp(user_id, count):
     # load up saved sets
