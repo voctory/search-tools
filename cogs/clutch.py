@@ -87,7 +87,7 @@ class Clutch:
     async def leaderboard(self, ctx):
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
-
+            #
         sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1])
         print(sorted_by_value)
 
