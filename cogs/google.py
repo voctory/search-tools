@@ -561,10 +561,12 @@ def find_coordinates_alt (msg, result, index):
             link = url[0]
             break
 
-    raw = get(link).text
+    print(link)
+    raw = get(link.format(msg)).text
     page = fromstring(raw)
 
     if len(page.cssselect(".longitude")) == 0:
+
 
         result[index] = {}
         return True
