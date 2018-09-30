@@ -83,6 +83,14 @@ class Clutch:
 
             await self.client.say("", embed=embed)
 
+    @commands.command(pass_context=True)
+    async def leaderboard(self, ctx):
+        with open('data/clutch.json') as data_file:
+            sets = json.load(data_file)
+
+        sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1], reverse=True)
+        print(sorted_by_value)
+
 def clutchUp(user_id, count):
     # load up saved sets
     with open('data/clutch.json') as data_file:
