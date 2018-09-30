@@ -549,11 +549,11 @@ def film_release_alt (msg):
 def find_coordinates_alt (msg, result, index):
 
     raw = get('https://www.google.com/search?q={} wiki'.format(msg)).text
-    page = fromstring(raw)
+    pg = fromstring(raw)
 
     link = ''
 
-    for result in page.cssselect(".r a"):
+    for result in pg.cssselect(".r a"):
         url = result.get("href")
         if url.startswith("/url?"):
             url = parse_qs(urlparse(url).query)['q']
