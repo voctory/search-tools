@@ -91,14 +91,14 @@ class Clutch:
         sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1], reverse=True)
 
         current = 0
-        lb_string = ""
+        lb_string = "PRIZE: Undetermined\n\n"
 
         for i in sorted_by_value:
             if current == 10:
                 break
 
             current += 1
-            lb_string += f'{current}. <@{sorted_by_value[0][0]}> ({sorted_by_value[0][1]} points)\n'
+            lb_string += f'**{current}.** <@{sorted_by_value[0][0]}> ({sorted_by_value[0][1]} points)\n'
 
         embed = discord.Embed(title="Clutch Leaderboard",
                 description=lb_string,
