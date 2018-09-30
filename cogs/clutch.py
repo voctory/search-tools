@@ -18,7 +18,7 @@ class Clutch:
             return
 
         embed = discord.Embed(title="Clutch",
-                description=f'React if you believe {ctx.message.mentions[0]} has clutched!\nVote within 15 seconds.',
+                description=f'React if you believe {ctx.message.mentions[0].mention} has clutched!\nVote within 15 seconds.',
                 color=0x801ecc)
         msg = await self.client.say("", embed=embed)
         await self.client.add_reaction(msg, "👍")
@@ -26,7 +26,10 @@ class Clutch:
         time.sleep(5)
 
         msg = await self.client.get_message(msg.channel, msg.id)
-        print(msg.reactions[0].emoji)
+        if msg.reactions[0].emoji.count >= 2 and msg.reactions[0].emoji.count > msg.reactions[1].emoji.count:
+            await self.client.say("Vote passed!")
+        else:
+            await self.client.say("Vote did not pass.")
 
 
 def setup(client):
