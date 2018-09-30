@@ -88,7 +88,7 @@ class Clutch:
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
 
-        sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1], reverse=True)
+        sorted_by_value = sorted(sets.items(), key=lambda kv: kv[0], reverse=True)
         print(sorted_by_value)
 
 def clutchUp(user_id, count):
