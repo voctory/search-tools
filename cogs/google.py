@@ -548,8 +548,8 @@ def film_release_alt (msg):
 
 def find_coordinates_alt (msg, result, index):
 
-    raw = get('https://www.google.com/search?q={} wiki'.format(msg)).text
-    pg = fromstring(raw)
+    raww = get('https://www.google.com/search?q={} wiki'.format(msg)).text
+    pg = fromstring(raww)
 
     link = ''
 
