@@ -21,8 +21,8 @@ class Clutch:
                 description=f'React if you believe {ctx.message.mentions[0]} has clutched!\nVote within 15 seconds.',
                 color=0x801ecc)
         msg = await self.client.say("", embed=embed)
-        await self.client.add_reaction(message, "👍")
-        await self.client.add_reaction(message, "👎")
+        await self.client.add_reaction(msg, "👍")
+        await self.client.add_reaction(msg, "👎")
         time.sleep(15)
 
         print(msg.reactions)
