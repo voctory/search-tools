@@ -594,6 +594,7 @@ def find_coordinates_alt (msg, result, index):
     else:
         longitude = float(longitude.replace("W", "")) * -1
 
+    print("HELLRORRWNOGWOUWO")
     result[index] = {'info': information, 'name': name, 'latitude': latitude, 'longitude': longitude}
     return True
 
