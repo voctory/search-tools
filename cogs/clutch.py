@@ -41,12 +41,16 @@ class Clutch:
         msg = await self.client.say("", embed=embed)
         await self.client.add_reaction(msg, "👍")
         await self.client.add_reaction(msg, "👎")
+
+        # TODO: adjust to 15
         await asyncio.sleep(10)
 
         msg = await self.client.get_message(msg.channel, msg.id)
+
+        # TODO: reset valeus
         if msg.reactions[0].count >= 2 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
-            clutchUp(ctx.message.mentions[0].id)
+            clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
         else:
             await self.client.say(f'Vote for {ctx.message.mentions[0].mention} did not pass.')
 
@@ -57,18 +61,29 @@ class Clutch:
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
 
-        if ctx.message.author.id not in list(sets):
-            await self.client.say("You haven't clutched before.")
-            return
+        if len(ctx.message.mentions) == 0:
+            if ctx.message.author.id not in list(sets):
+                await self.client.say("You haven't clutched before.")
+                return
 
-        embed = discord.Embed(title="Clutch Score",
-                description=f'{ctx.message.author.mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
-                color=0x801ecc)
+            embed = discord.Embed(title="Clutch Score",
+                    description=f'{ctx.message.author.mention} has a clutch score of **{sets[str(ctx.message.author.id)]}**.',
+                    color=0x801ecc)
 
-        await self.client.say("", embed=embed)
+            await self.client.say("", embed=embed)
 
+        else:
+            if ctx.message.mentions[0].id not in list(sets):
+                await self.client.say("They haven't clutched before.")
+                return
 
-def clutchUp(user_id):
+            embed = discord.Embed(title="Clutch Score",
+                    description=f'{ctx.message.mentions[0].mention} has a clutch score of **{sets[str(ctx.message.mentions[0].id)]}**.',
+                    color=0x801ecc)
+
+            await self.client.say("", embed=embed)
+
+def clutchUp(user_id, count):
     # load up saved sets
     with open('data/clutch.json') as data_file:
         sets = json.load(data_file)
@@ -78,6 +93,12 @@ def clutchUp(user_id):
         sets[str(user_id)] = 0
 
     sets[str(user_id)] += 1
+    if count > 9:
+        sets[str(user_id)] += 1
+
+    if count > 13:
+        sets[str(user_id)] += 1
+
     with open('data/clutch.json', 'w') as file:
         file.write(json.dumps(sets))
 
