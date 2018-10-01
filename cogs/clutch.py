@@ -98,9 +98,11 @@ class Clutch:
             if current == 10:
                 break
 
+            """
             position = current
             if tiebreaker.score == sorted_by_value[current][1]:
                 position = tiebreaker.position
+            """
             # TODO: Finish this
 
             lb_string += f'**{current + 1}.** <@{sorted_by_value[current][0]}> ({sorted_by_value[current][1]} points)\n'
