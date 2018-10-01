@@ -125,14 +125,14 @@ def clutchUp(user_id, count):
 
     sets[str(user_id)] += 1
     print(count)
-    if count > 1:
-        sets[str(user_id)] += 10
+    if count > 6:
+        sets[str(user_id)] += 1
 
     if count > 9:
         sets[str(user_id)] += 1
 
     if count > 12:
-        sets[str(user_id)] += 1
+        sets[str(user_id)] += 2
 
     with open('data/clutch.json', 'w') as file:
         file.write(json.dumps(sets))
