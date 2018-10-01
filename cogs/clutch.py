@@ -91,13 +91,19 @@ class Clutch:
         sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1], reverse=True)
 
         current = 0
+        tiebreaker = {score: 0, position: 0}
         lb_string = "PRIZE: Undetermined\n\n"
 
         for i in sorted_by_value:
             if current == 10:
                 break
 
-            lb_string += f'**{current}.** <@{sorted_by_value[current][0]}> ({sorted_by_value[current][1]} points)\n'
+            position = current
+            if tiebreaker.score == sorted_by_value[current][1]:
+                position = tiebreaker.position
+            # TODO: Finish this
+
+            lb_string += f'**{current + 1}.** <@{sorted_by_value[current][0]}> ({sorted_by_value[current][1]} points)\n'
             current += 1
 
         embed = discord.Embed(title="Clutch Leaderboard",
@@ -116,13 +122,13 @@ def clutchUp(user_id, count):
         sets[str(user_id)] = 0
 
     sets[str(user_id)] += 1
-    if count > 8:
+    if count > 7:
         sets[str(user_id)] += 1
 
-    if count > 10:
+    if count > 9:
         sets[str(user_id)] += 1
 
-    if count > 14:
+    if count > 12:
         sets[str(user_id)] += 1
 
     with open('data/clutch.json', 'w') as file:
