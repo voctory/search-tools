@@ -91,7 +91,7 @@ class Clutch:
         sorted_by_value = sorted(sets.items(), key=lambda kv: kv[1], reverse=True)
 
         current = 0
-        tiebreaker = {score: 0, position: 0}
+        tiebreaker = {"score": 0, "position": 0}
         lb_string = "PRIZE: Undetermined\n\n"
 
         for i in sorted_by_value:
