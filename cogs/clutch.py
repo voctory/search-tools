@@ -125,8 +125,8 @@ def clutchUp(user_id, count):
 
     sets[str(user_id)] += 1
     print(count)
-    if count > 7:
-        sets[str(user_id)] += 1
+    if count > 1:
+        sets[str(user_id)] += 10
 
     if count > 9:
         sets[str(user_id)] += 1
