@@ -92,7 +92,7 @@ class Clutch:
 
         current = 0
         tiebreaker = {"score": 0, "position": 0}
-        lb_string = "PRIZE: Undetermined\n\n"
+        lb_string = "[Click here to view the prize pool](https://www.paypal.com/pools/c/88uoO4Lcwh)\n\n"
 
         for i in sorted_by_value:
             if current == 10:
