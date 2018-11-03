@@ -48,7 +48,7 @@ class Clutch:
         msg = await self.client.get_message(msg.channel, msg.id)
 
         # TODO: reset valeus
-        print(await self.client.get_reaction_users("👍"))
+        print(await self.client.get_reaction_users(msg.reactions[0]))
 
         if msg.reactions[0].count > 4 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
