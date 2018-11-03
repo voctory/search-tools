@@ -36,7 +36,7 @@ class Clutch:
         clutch_list.append(ctx.message.mentions[0].id)
 
         embed = discord.Embed(title="Clutch Vote",
-                description=f'React if you believe {ctx.message.mentions[0].mention} has clutched!\nVote within 15 seconds. At least 4 people must agree and it has to be a majority.',
+                description=f'React if you believe {ctx.message.mentions[0].mention} has clutched!\nVote within 15 seconds. At least 3 people (besides the recipient) must agree and it has to be a majority.',
                 color=0x801ecc)
         msg = await self.client.say("", embed=embed)
         await self.client.add_reaction(msg, "👍")
@@ -49,15 +49,14 @@ class Clutch:
 
         # TODO: reset valeus
         usersReacted = await self.client.get_reaction_users(msg.reactions[0])
-        clutchReacted = False
+        totalReactedYes = msg.reactions[0].count
 
         for i in usersReacted:
             if i.id == ctx.message.mentions[0].id:
-                clutchReacted = True
+                totalReactedYes -= 1
 
-        print(clutchReacted)
 
-        if msg.reactions[0].count > 4 and msg.reactions[0].count > msg.reactions[1].count:
+        if totalReactedYes > 3 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
             clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
         else:
