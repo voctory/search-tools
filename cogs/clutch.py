@@ -11,7 +11,7 @@ class Clutch:
     def __init__(self, client):
         self.client = client
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['c'])
     async def clutch(self, ctx):
         if len(ctx.message.mentions) == 0:
             await self.client.say("You need to mention someone!")
@@ -48,8 +48,14 @@ class Clutch:
         msg = await self.client.get_message(msg.channel, msg.id)
 
         # TODO: reset valeus
-        test = await self.client.get_reaction_users(msg.reactions[0])
-        print(msg.author == test[0])
+        usersReacted = await self.client.get_reaction_users(msg.reactions[0])
+        clutchReacted = False
+
+        for i in usersReacted:
+            if i.id == ctx.message.mentions[0].id:
+                clutchReacted = True
+
+        print(clutchReacted)
 
         if msg.reactions[0].count > 4 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
@@ -86,7 +92,7 @@ class Clutch:
 
             await self.client.say("", embed=embed)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['lb', 'leaderboards'])
     async def leaderboard(self, ctx):
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
