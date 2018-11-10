@@ -5,6 +5,14 @@ import json
 import asyncio
 import time
 
+# load perms file
+with open('data/permitted.json') as data_file:
+    data = json.load(data_file)
+
+# checks for permitted
+def permitted(ctx):
+    return ctx.message.author.id in data["ids"]
+
 clutch_list = []
 
 class Clutch:
@@ -90,6 +98,33 @@ class Clutch:
                     color=0x801ecc)
 
             await self.client.say("", embed=embed)
+
+    @commands.command(pass_context=True)
+    @commands.check(permitted)
+    async def setscore(self, ctx):
+        if len(ctx.message.mentions) == 0:
+            await self.client.say("You need to mention someone!")
+            return
+
+        # determining the input number
+        if ctx.message.content.split()[2].isdigit() !== True:
+            self.client.say("You need to specify an integer.")
+            return
+
+        inputNum = ctx.message.content.split()[2]
+        user_id = ctx.message.mentions[0].id
+
+        # opening clutch file
+        with open('data/clutch.json') as data_file:
+            sets = json.load(data_file)
+
+        if str(user_id) not in list(sets):
+            sets[str(user_id)] = 0
+
+        sets[str(user_id)] = inputNum
+
+        with open('data/clutch.json', 'w') as file:
+            file.write(json.dumps(sets))
 
     @commands.command(pass_context=True, aliases=['lb', 'leaderboards'])
     async def leaderboard(self, ctx):
