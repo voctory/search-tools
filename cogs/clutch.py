@@ -108,7 +108,7 @@ class Clutch:
 
         # determining the input number
         if ctx.message.content.split()[2].isdigit() != True:
-            self.client.say("You need to specify an integer.")
+            await self.client.say("You need to specify an integer.")
             return
 
         inputNum = ctx.message.content.split()[2]
@@ -125,6 +125,8 @@ class Clutch:
 
         with open('data/clutch.json', 'w') as file:
             file.write(json.dumps(sets))
+
+        await self.client.say("Successfully updated their clutch score!")
 
     @commands.command(pass_context=True, aliases=['lb', 'leaderboards'])
     async def leaderboard(self, ctx):
