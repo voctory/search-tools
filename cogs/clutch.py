@@ -208,7 +208,7 @@ def clutchUp(user_id, count):
     with open('data/clutch.json', 'w') as file:
         file.write(json.dumps(sets))
 
-    new_score = set[str(user_id)]
+    new_score = sets[str(user_id)]
     return {'old': old_score, 'new': new_score}
 
 def setup(client):
