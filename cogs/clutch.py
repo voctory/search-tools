@@ -107,6 +107,10 @@ class Clutch:
             return
 
         # determining the input number
+        if ctx.message.content.split()[2] != True:
+            await self.client.say("You need to specify an integer.")
+            return
+
         if ctx.message.content.split()[2].isdigit() != True:
             await self.client.say("You need to specify an integer.")
             return
