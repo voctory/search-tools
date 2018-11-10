@@ -72,7 +72,7 @@ class Clutch:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
             clutch_score = clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
 
-            info_msg = f'Vote passed for {ctx.message.mentions[0].username}#{ctx.message.mentions[0].discriminator} by {msg.reactions[0].count - 1}-{msg.reactions[1].count - 1}. SCORE: {clutch_score["old"]} -> {clutch_score["new"]}'
+            info_msg = f'Vote passed for {ctx.message.mentions[0].name}#{ctx.message.mentions[0].discriminator} by {msg.reactions[0].count - 1}-{msg.reactions[1].count - 1}. SCORE: {clutch_score["old"]} -> {clutch_score["new"]}'
 
             channel = await self.client.get_channel("510630866326781952")
             await self.client.send_message(channel, info_msg)
@@ -148,7 +148,7 @@ class Clutch:
         await self.client.say("Successfully updated their clutch score!")
 
         # logs
-        info_msg = f'{ctx.message.author.username} has changed {ctx.message.mentions[0].username}#{ctx.message.mentions[0].discriminator}\'s score from {old} to {new}'
+        info_msg = f'{ctx.message.author.name} has changed {ctx.message.mentions[0].name}#{ctx.message.mentions[0].discriminator}\'s score from {old} to {new}'
 
         channel = await self.client.get_channel("510630866326781952")
         await self.client.send_message(channel, info_msg)
