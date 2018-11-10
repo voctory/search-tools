@@ -15,7 +15,7 @@ def permitted(ctx):
 
 # preparing for logs
 import logging
-logging.basicConfig(filename='data/clutch.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+logging.basicConfig(filename='data/clutch.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 
 clutch_list = []
 
