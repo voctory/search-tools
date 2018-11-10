@@ -74,8 +74,7 @@ class Clutch:
 
             info_msg = f'Vote passed for {ctx.message.mentions[0].name}#{ctx.message.mentions[0].discriminator} by {msg.reactions[0].count - 1}-{msg.reactions[1].count - 1}. SCORE: {clutch_score["old"]} -> {clutch_score["new"]}'
 
-            channel = await self.client.get_channel("510630866326781952")
-            await self.client.send_message(channel, info_msg)
+            await self.client.send_message(self.client.get_channel("510630866326781952"), info_msg)
             logging.info(info_msg)
 
         else:
@@ -150,10 +149,8 @@ class Clutch:
         # logs
         info_msg = f'{ctx.message.author.name} has changed {ctx.message.mentions[0].name}#{ctx.message.mentions[0].discriminator}\'s score from {old} to {new}'
 
-        channel = await self.client.get_channel("510630866326781952")
-        await self.client.send_message(channel, info_msg)
+        await self.client.send_message(self.client.get_channel("510630866326781952"), info_msg)
         logging.info(info_msg)
-
 
     @commands.command(pass_context=True, aliases=['lb', 'leaderboards'])
     async def leaderboard(self, ctx):
