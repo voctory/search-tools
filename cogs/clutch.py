@@ -137,7 +137,7 @@ class Clutch:
         if str(user_id) not in list(sets):
             sets[str(user_id)] = 0
 
-        sets[str(user_id)] = inputNum
+        sets[str(user_id)] = int(inputNum)
 
         with open('data/clutch.json', 'w') as file:
             file.write(json.dumps(sets))
