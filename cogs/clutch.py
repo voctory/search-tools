@@ -13,6 +13,10 @@ with open('data/permitted.json') as data_file:
 def permitted(ctx):
     return ctx.message.author.id in data["ids"]
 
+# preparing for logs
+import logging
+logging.basicConfig(filename='data/clutch.log', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+
 clutch_list = []
 
 class Clutch:
@@ -66,7 +70,13 @@ class Clutch:
 
         if totalReactedYes > 3 and msg.reactions[0].count > msg.reactions[1].count:
             await self.client.say(f'Vote has been passed for {ctx.message.mentions[0].mention}!')
-            clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
+            clutch_score = clutchUp(ctx.message.mentions[0].id, msg.reactions[0].count)
+
+            info_msg = f'Vote passed for {ctx.message.mentions[0].username}#{ctx.message.mentions[0].discriminator} by {msg.reactions[0].count - 1}-{msg.reactions[1].count - 1}. SCORE: {clutch_score["old"]} -> {clutch_score["new"]}'
+
+            await self.client.send_message(self.client.get_channel("510630866326781952"), info_msg)
+            logging.info(info_msg)
+
         else:
             await self.client.say(f'Vote for {ctx.message.mentions[0].mention} did not pass.')
 
@@ -122,6 +132,8 @@ class Clutch:
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
 
+        old = sets[str(user_id)]
+
         if str(user_id) not in list(sets):
             sets[str(user_id)] = 0
 
@@ -130,7 +142,16 @@ class Clutch:
         with open('data/clutch.json', 'w') as file:
             file.write(json.dumps(sets))
 
+        new = sets[str(user_id)]
+
         await self.client.say("Successfully updated their clutch score!")
+
+        # logs
+        info_msg = f'{ctx.message.author.username} has changed {ctx.message.mentions[0].username}#{ctx.message.mentions[0].discriminator}\'s score from {old} to {new}'
+
+        await self.client.send_message(self.client.get_channel("510630866326781952"), info_msg)
+        logging.info(info_msg)
+
 
     @commands.command(pass_context=True, aliases=['lb', 'leaderboards'])
     async def leaderboard(self, ctx):
@@ -168,6 +189,8 @@ def clutchUp(user_id, count):
     with open('data/clutch.json') as data_file:
         sets = json.load(data_file)
 
+    old_score = sets[str(user_id)]
+
     # adding new dict if user isn't already there
     if str(user_id) not in list(sets):
         sets[str(user_id)] = 0
@@ -185,6 +208,9 @@ def clutchUp(user_id, count):
 
     with open('data/clutch.json', 'w') as file:
         file.write(json.dumps(sets))
+
+    new_score = set[str(user_id)]
+    return {'old': old_score, 'new': new_score}
 
 def setup(client):
     client.add_cog(Clutch(client))
