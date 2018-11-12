@@ -188,11 +188,11 @@ def clutchUp(user_id, count):
     with open('data/clutch.json') as data_file:
         sets = json.load(data_file)
 
-    old_score = sets[str(user_id)]
-
     # adding new dict if user isn't already there
     if str(user_id) not in list(sets):
         sets[str(user_id)] = 0
+
+    old_score = sets[str(user_id)]
 
     sets[str(user_id)] += 1
 
