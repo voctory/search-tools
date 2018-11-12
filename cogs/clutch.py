@@ -132,10 +132,10 @@ class Clutch:
         with open('data/clutch.json') as data_file:
             sets = json.load(data_file)
 
-        old = sets[str(user_id)]
-
         if str(user_id) not in list(sets):
             sets[str(user_id)] = 0
+
+        old = sets[str(user_id)]
 
         sets[str(user_id)] = int(inputNum)
 
