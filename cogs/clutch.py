@@ -121,7 +121,9 @@ class Clutch:
             await self.client.say("You need to specify an integer.")
             return
 
-        if ctx.message.content.split()[2].isdigit() != True:
+        try:
+            int(ctx.message.content.split()[2])
+        except ValueError:
             await self.client.say("You need to specify an integer.")
             return
 
