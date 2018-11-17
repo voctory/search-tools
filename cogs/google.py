@@ -65,7 +65,8 @@ class Google:
 
         for x in results:
             res = x
-            embed.add_field(name=res["name"], value=res["info"], inline=False)
+            # neglecting fields to reduce spam
+            # embed.add_field(name=res["name"], value=res["info"], inline=False)
 
             # convert date to datetime
             released = res["info"].split("(")[0].strip().replace(",", "", 1).split(",")[0]
@@ -356,7 +357,8 @@ class Google:
 
         for x in results:
             res = x
-            embed.add_field(name=res["name"], value=res["info"], inline=False)
+            # neglecting fields to reduce spam
+            # embed.add_field(name=res["name"], value=res["info"], inline=False)
 
             if comparison["south"]["location"] == False:
                 comparison["south"]["value"] = res["latitude"]
